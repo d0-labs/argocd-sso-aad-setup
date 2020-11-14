@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  url: https://<argocd_server>/argo-cd
+  # Replace <tenant_id> and <azure_ad_application_id> actual values
+  oidc.config: |
+      name: Azure
+      issuer: https://login.microsoftonline.com/<tenant_id>/v2.0
+      clientID: <azure_ad_application_id>
+      clientSecret: $oidc.azure.clientSecret
+      requestedIDTokenClaims:
+          groups:
+              essential: true
+      requestedScopes:
+          - openid
+          - profile
+          - email
+
+  accounts.adriana: apiKey, login
